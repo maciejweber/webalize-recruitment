@@ -1,0 +1,5 @@
+export { getPosts, getPostBySlug } from './posts'
+export { getFaq } from './faq'
+export { getIntegrations } from './integrations'
+export { getCategories } from './categories'
+export { getHeader, getFooter } from './globals'

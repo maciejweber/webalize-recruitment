@@ -14,7 +14,6 @@ export const Posts: CollectionConfig = {
     maxPerDoc: 50,
   },
   access: {
-    // Unauthenticated users can only see published posts
     read: ({ req: { user } }) => {
       if (user) return true
       return { _status: { equals: 'published' } }
@@ -89,7 +88,6 @@ export const Posts: CollectionConfig = {
   hooks: {
     beforeChange: [
       ({ data, operation }) => {
-        // Automatically set publishedAt when first publishing
         if (operation === 'create' && data._status === 'published' && !data.publishedAt) {
           data.publishedAt = new Date().toISOString()
         }
