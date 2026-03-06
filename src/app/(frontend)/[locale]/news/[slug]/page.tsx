@@ -1,6 +1,9 @@
 import { notFound } from 'next/navigation'
 import { isSupportedLocale } from '@/lib/i18n'
-import { getPostBySlug, getCategories } from '@/lib/api'
+import { getPostBySlug } from '@/lib/api'
+import { getDictionary } from '@/lib/dictionaries'
+import { formatDate } from '@/lib/format'
+import { RichText } from '@/components/RichText'
 import type { Locale } from '@/lib/i18n'
 import type { Metadata } from 'next'
 
@@ -34,9 +37,25 @@ export default async function NewsPostPage({ params }: NewsPostPageProps) {
   if (!isSupportedLocale(rawLocale)) notFound()
 
   const locale = rawLocale as Locale
-  const post = await getPostBySlug(slug, locale)
+  const [post, t] = await Promise.all([getPostBySlug(slug, locale), getDictionary(locale)])
 
   if (!post) notFound()
 
-  return null
+  return (
+    <article>
+      <header>
+        <h1>{post.title}</h1>
+        {post.publishedAt && (
+          <time dateTime={post.publishedAt}>{formatDate(post.publishedAt, locale)}</time>
+        )}
+        {post.readTime && <span>{post.readTime} {t.common.minRead}</span>}
+      </header>
+
+      <RichText data={post.content as Record<string, unknown>} />
+
+      <footer>
+        <a href={`/${locale}/news`}>{t.common.backToNews}</a>
+      </footer>
+    </article>
+  )
 }
