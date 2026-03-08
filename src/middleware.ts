@@ -38,7 +38,6 @@ export function middleware(request: NextRequest) {
     return response
   }
 
-  // Forward the pathname as a request header so not-found.tsx can infer the locale.
   const requestHeaders = new Headers(request.headers)
   requestHeaders.set('x-pathname', pathname)
   return NextResponse.next({ request: { headers: requestHeaders } })
