@@ -11,8 +11,10 @@ import { Categories } from './collections/Categories'
 import { Posts } from './collections/Posts'
 import { Faq } from './collections/Faq'
 import { Integrations } from './collections/Integrations'
+import { ContactSubmissions } from './collections/ContactSubmissions'
 import { Header } from './globals/Header'
 import { Footer } from './globals/Footer'
+import { contactEndpoint } from './endpoints'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -24,8 +26,9 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Categories, Posts, Faq, Integrations],
+  collections: [Users, Media, Categories, Posts, Faq, Integrations, ContactSubmissions],
   globals: [Header, Footer],
+  endpoints: [contactEndpoint],
   editor: lexicalEditor(),
   localization: {
     locales: [

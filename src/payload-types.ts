@@ -73,6 +73,7 @@ export interface Config {
     posts: Post;
     faq: Faq;
     integrations: Integration;
+    'contact-submissions': ContactSubmission;
     'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
@@ -87,6 +88,7 @@ export interface Config {
     posts: PostsSelect<false> | PostsSelect<true>;
     faq: FaqSelect<false> | FaqSelect<true>;
     integrations: IntegrationsSelect<false> | IntegrationsSelect<true>;
+    'contact-submissions': ContactSubmissionsSelect<false> | ContactSubmissionsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -298,6 +300,35 @@ export interface Integration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-submissions".
+ */
+export interface ContactSubmission {
+  id: number;
+  fullName: string;
+  email: string;
+  companyName: string;
+  /**
+   * E.164 country dial code, e.g. "+48"
+   */
+  phoneCountryCode?: string | null;
+  phoneNumber?: string | null;
+  /**
+   * Preferred date for the call.
+   */
+  preferredDate?: string | null;
+  /**
+   * Preferred time slot for the call.
+   */
+  preferredTime?: ('08:00' | '10:00' | '12:00' | '14:00' | '16:00') | null;
+  /**
+   * User has accepted the privacy policy.
+   */
+  privacyAccepted: boolean;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -435,6 +466,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'integrations';
         value: number | Integration;
+      } | null)
+    | ({
+        relationTo: 'contact-submissions';
+        value: number | ContactSubmission;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -569,6 +604,22 @@ export interface IntegrationsSelect<T extends boolean = true> {
   url?: T;
   featured?: T;
   order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-submissions_select".
+ */
+export interface ContactSubmissionsSelect<T extends boolean = true> {
+  fullName?: T;
+  email?: T;
+  companyName?: T;
+  phoneCountryCode?: T;
+  phoneNumber?: T;
+  preferredDate?: T;
+  preferredTime?: T;
+  privacyAccepted?: T;
   updatedAt?: T;
   createdAt?: T;
 }
