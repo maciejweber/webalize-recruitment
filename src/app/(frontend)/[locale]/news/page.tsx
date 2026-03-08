@@ -4,10 +4,21 @@ import { getPosts, getCategories } from '@/lib/api'
 import { getDictionary } from '@/lib/dictionaries'
 import { formatDate } from '@/lib/format'
 import type { Locale } from '@/lib/i18n'
+import type { Metadata } from 'next'
 
 interface NewsPageProps {
   params: Promise<{ locale: string }>
   searchParams: Promise<{ category?: string; page?: string }>
+}
+
+export async function generateMetadata({ params }: NewsPageProps): Promise<Metadata> {
+  const { locale: rawLocale } = await params
+  if (!isSupportedLocale(rawLocale)) return {}
+  const t = getDictionary(rawLocale)
+  return {
+    title: t.pages.newsTitle,
+    description: t.pages.newsDescription,
+  }
 }
 
 export default async function NewsPage({ params, searchParams }: NewsPageProps) {

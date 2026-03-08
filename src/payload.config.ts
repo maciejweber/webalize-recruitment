@@ -33,7 +33,7 @@ export default buildConfig({
       { label: 'English', code: 'en' },
       { label: 'German', code: 'de' },
     ],
-    defaultLocale: 'pl',
+    defaultLocale: 'en',
     fallback: true,
   },
   secret: process.env.PAYLOAD_SECRET || '',

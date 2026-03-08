@@ -4,10 +4,21 @@ import { getFaq, getCategories } from '@/lib/api'
 import { getDictionary } from '@/lib/dictionaries'
 import { RichText } from '@/components/RichText'
 import type { Locale } from '@/lib/i18n'
+import type { Metadata } from 'next'
 
 interface FaqPageProps {
   params: Promise<{ locale: string }>
   searchParams: Promise<{ category?: string }>
+}
+
+export async function generateMetadata({ params }: FaqPageProps): Promise<Metadata> {
+  const { locale: rawLocale } = await params
+  if (!isSupportedLocale(rawLocale)) return {}
+  const t = getDictionary(rawLocale)
+  return {
+    title: t.pages.faqTitle,
+    description: t.pages.faqDescription,
+  }
 }
 
 export default async function FaqPage({ params, searchParams }: FaqPageProps) {

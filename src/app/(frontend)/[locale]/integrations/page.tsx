@@ -3,9 +3,20 @@ import { isSupportedLocale } from '@/lib/i18n'
 import { getIntegrations } from '@/lib/api'
 import { getDictionary } from '@/lib/dictionaries'
 import type { Locale } from '@/lib/i18n'
+import type { Metadata } from 'next'
 
 interface IntegrationsPageProps {
   params: Promise<{ locale: string }>
+}
+
+export async function generateMetadata({ params }: IntegrationsPageProps): Promise<Metadata> {
+  const { locale: rawLocale } = await params
+  if (!isSupportedLocale(rawLocale)) return {}
+  const t = getDictionary(rawLocale)
+  return {
+    title: t.pages.integrationsTitle,
+    description: t.pages.integrationsDescription,
+  }
 }
 
 export default async function IntegrationsPage({ params }: IntegrationsPageProps) {

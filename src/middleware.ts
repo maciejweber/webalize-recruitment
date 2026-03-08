@@ -32,10 +32,16 @@ export function middleware(request: NextRequest) {
     const locale = detectLocale(request)
     const url = request.nextUrl.clone()
     url.pathname = `/${locale}${pathname}`
-    return NextResponse.redirect(url)
+
+    const response = NextResponse.rewrite(url)
+    response.headers.set('x-pathname', url.pathname)
+    return response
   }
 
-  return NextResponse.next()
+  // Forward the pathname as a request header so not-found.tsx can infer the locale.
+  const requestHeaders = new Headers(request.headers)
+  requestHeaders.set('x-pathname', pathname)
+  return NextResponse.next({ request: { headers: requestHeaders } })
 }
 
 export const config = {
